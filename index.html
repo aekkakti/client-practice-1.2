@@ -12,11 +12,10 @@
 </head>
 <body>
 
-
 <div id="todo">
-    <column-1></column-1>
+    <column v-for="(column, columnName) in columns" :key="columnName" :cards="column.cards"
+            :add-card="addCard(columnName)" :title="column.title"></column>
 </div>
-
 
 </body>
 </html>

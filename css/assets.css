@@ -1,4 +1,7 @@
 #todo {
     border: 1px solid black;
     width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 250px;
 }

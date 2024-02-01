@@ -1,38 +1,37 @@
-Vue.component('column-1', {
+Vue.component('column', {
+    props: ['cards', 'addCard', 'title'],
     template: `
-        
-    <div>
-    <h1>Столбец 1</h1>
-    <h2>Добавить название</h2>
-        <input type="text" name="card">
-        <button @click="addCard">Add</button>
-     </div>
+        <div>
+            <h1>{{ title }}</h1>
+            <h2>Добавить название</h2>
+            <input type="text" v-model="newCard" name="card">
+            <button @click="addCard(newCard)">Add</button>
+            <ul>
+                <li v-for="card in cards">{{ card }}</li>
+            </ul>
+        </div>
     `,
     data() {
         return {
-            cards: []
+            newCard: ''
         }
     },
-    methods: {
-        addList(value) {
-            this.$emit('change', value)
-        },
-    }
-})
+});
 
-// Проверка работоспособности LocalStorage
 let app = new Vue({
     el: '#todo',
     data: {
-        name:'',
-        column1Cards: [],
-        column2Cards: [],
-        column3Cards: []
+        columns: {
+            column1: { title: 'Принято в работу', cards: [] },
+            column2: { title: 'Выполняется', cards: [] },
+            column3: { title: 'Готово', cards: [] }
+        }
     },
     methods: {
-        addCard(value) {
-            this.cards.push(this.card)
-            console.log(this.cards);
+        addCard(column) {
+            return (newCard) => {
+                this.columns[column].cards.push(newCard);
+            };
         }
     }
-})
+});
