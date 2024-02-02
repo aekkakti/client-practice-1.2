@@ -31,6 +31,11 @@ Vue.component('column', {
             name: '',
             cards: [],
             count: 0,
+            columns: {
+                column1: { title: 'Принято в работу', cards: [] },
+                column2: { title: 'Выполняется', cards: []},
+                column3: { title: 'Готово', cards: [],}
+            },
         }
     },
 });
