@@ -14,7 +14,7 @@
 
 <div id="todo">
     <column v-for="(column, columnName) in columns" :key="columnName" :cards="column.cards"
-            :add-card="addCard(columnName)" :title="column.title"></column>
+            :add-card="addCard(columnName)" :add-task="addTask(columnName)" :title="column.title"></column>
 </div>
 
 </body>

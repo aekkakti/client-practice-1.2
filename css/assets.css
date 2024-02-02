@@ -2,6 +2,23 @@
     border: 1px solid black;
     width: 100%;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 250px;
+    grid-template-columns: repeat(3, 30%);
+    grid-column-gap: 75px;
+}
+
+button {
+    font-size: 12pt;
+    background-color: blue;
+    color: white;
+    border-radius: 10%;
+    border: none;
+    cursor: pointer;
+}
+
+.fs-32pt {
+    font-size: 32pt;
+}
+
+.t-a-c {
+    text-align: center;
 }
