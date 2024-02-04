@@ -1,54 +1,113 @@
-Vue.component('column', {
+Vue.component('column1', {
     template: `
-        <div class="t-a-c">
-            <h1 class="fs-32pt">{{ title }}</h1><br>
-            <h2>Добавить карточку</h2>
-            <input type="text" v-model="name"><br><br>
-            <button @click="addCard(name)">Добавить</button>
-            <ul>
-                <li v-for="(card, index) in cards">
-                <p>{{ card.name }}</p>           
-                <add-tasks :tasks="card.tasks" @add-task="addTask(index, $event)"></add-tasks>
-                </li>
-            </ul>
-            
-        </div>
-    `,
+    <div class="column" id="important-column">
+        <h2 class="t-a-c">Принято в работу</h2>
+        <input v-model="name" type="text">
+        <button v-on:click="addCard(name)">Добавить карточку</button>
+        <ul>
+            <li v-for="(card, index) in cards">
+            <p>{{ card.name }}</p>
+            <todo-list :tasks="card.tasks" @add-task="addTask(index, $event)"></todo-list>
+            </li>
+    </ul>
+    </div>`,
     methods: {
         addCard() {
-            if (this.count < 3){
+            if (this.quantity < 3 && this.name !== '') {
                 this.cards.push({name: this.name, tasks: []})
-                this.name = '';
-                this.count += 1;
+                this.name = ''
+                this.quantity += 1
             }
         },
         addTask(cardIndex, newTask) {
             this.cards[cardIndex].tasks.push(newTask)
-        }
+        },
     },
     data() {
         return {
             name: '',
             cards: [],
-            count: 0,
-            columns: {
-                column1: { title: 'Принято в работу', cards: [] },
-                column2: { title: 'Выполняется', cards: []},
-                column3: { title: 'Готово', cards: [],}
-            },
+            quantity: 0
         }
-    },
-});
+    }
+})
 
-Vue.component('add-tasks', {
+Vue.component('column2', {
+    template: `
+    <div class="column" id="important-column">
+        <h2 class="t-a-c">В моменте</h2>
+        <input v-model="name" type="text">
+        <button v-on:click="addCard(name)">Добавить карточку</button>
+        <ul>
+            <li v-for="(card, index) in cards">
+            <p>{{ card.name }}</p>
+            <todo-list :tasks="card.tasks" @add-task="addTask(index, $event)"></todo-list>
+            </li>
+    </ul>
+    </div>`,
+    methods: {
+        addCard(name) {
+            if (this.quantity < 3 && this.name !== '') {
+                this.cards.push({name: this.name, tasks: []})
+                this.name = ''
+                this.quantity += 1
+            }
+        },
+        addTask(cardIndex, newTask) {
+            this.cards[cardIndex].tasks.push(newTask)
+        },
+    },
+    data() {
+        return {
+            name: '',
+            cards: [],
+            quantity: 0
+        }
+    }
+})
+
+Vue.component('column3', {
+    template: `
+    <div class="column" id="important-column">
+        <h2 class="t-a-c">Выполнено</h2>
+        <input v-model="name" type="text">
+        <button v-on:click="addCard(name)">Добавить карточку</button>
+        <ul>
+            <li v-for="(card, index) in cards">
+            <p>{{ card.name }}</p>
+            <todo-list :tasks="card.tasks" @add-task="addTask(index, $event)"></todo-list>
+            </li>
+    </ul>
+    </div>`,
+    methods: {
+        addCard(name) {
+            if (this.quantity < 3 && this.name !== '') {
+                this.cards.push({name: this.name, tasks: []})
+                this.name = ''
+                this.quantity += 1
+            }
+        },
+        addTask(cardIndex, newTask) {
+            this.cards[cardIndex].tasks.push(newTask)
+        },
+    },
+    data() {
+        return {
+            name: '',
+            cards: [],
+            quantity: 0
+        }
+    }
+})
+
+Vue.component('todo-list', {
     props: ['tasks'],
     template: `
     <ul>
         <li v-for="(task, index) in tasks" :key="index">
             <p>{{task.name}}</p>
         </li>
-        <h2>Добавить задачу</h2>
-        <input type="text" v-model="newTask" name="task">
+        <input v-model="newTask" type="text">
         <button @click="addTask">Добавить задачу</button>
     </ul>
     `,
@@ -59,12 +118,14 @@ Vue.component('add-tasks', {
     },
     methods: {
         addTask() {
-            this.$emit('add-task', {name: this.newTask})
-            this.newTask = ''
+            if (this.newTask !== ''){
+                this.$emit('add-task', {name: this.newTask})
+                this.newTask = ''
+            }
         },
     }
 })
 
 let app = new Vue({
-    el: '#todo',
-});
+    el: "#todo",
+})
