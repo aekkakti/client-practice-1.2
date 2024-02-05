@@ -1,4 +1,4 @@
-# TODO - client-practice-TODO-1.2
+# TODO - client-practice-1.2
 
 Простенькая реализация проекта для хранения заметок (TODO)
 
