@@ -22,3 +22,12 @@ button {
 .t-a-c {
     text-align: center;
 }
+
+.completeStyle {
+    text-decoration: line-through;
+    color: red;
+}
+
+.completeStyle:hover {
+    cursor: pointer;
+}
