@@ -14,14 +14,17 @@ Vue.component('column1', {
     `,
     methods: {
         addCard() {
-            if (this.count < 3 && this.name !== '') {
+            if (this.countCards < 3 && this.name !== '') {
                 this.cards.push({name: this.name, tasks: []})
                 this.name = ''
-                this.count += 1
+                this.countCards += 1
+            }
+            else {
+                alert('Максимум можно добавить только 3 карточки!')
             }
         },
-        addTask(cardIndex, newTask) {
-            this.cards[cardIndex].tasks.push(newTask)
+        addTask(cardIndex, newTask, countTasks) {
+            this.cards[cardIndex].tasks.push(newTask);
         },
         completeTask(cardIndex, taskIndex) {
             this.cards[cardIndex].tasks[taskIndex].completeStyle = !this.cards[cardIndex].tasks[taskIndex].completeStyle
@@ -31,7 +34,7 @@ Vue.component('column1', {
         return {
             name: '',
             cards: [],
-            count: 0
+            countCards: 0,
         }
     }
 })
@@ -40,22 +43,14 @@ Vue.component('column2', {
     template: `
     <div class="column">
         <h2 class="t-a-c">В моменте</h2>
-        <input v-model="name" type="text">
-        <button v-on:click="addCard(name)">Добавить карточку</button>
-        <ul>
-            <li v-for="(card, index) in cards">
-                <p>{{ card.name }}</p>
-                <list :tasks="card.tasks" @add-task="addTask(index, $event)"></list>
-            </li>
-        </ul>
     </div>
     `,
     methods: {
         addCard() {
-            if (this.count < 3 && this.name !== '') {
+            if (this.countCards < 5 && this.name !== '') {
                 this.cards.push({name: this.name, tasks: []})
                 this.name = ''
-                this.count += 1
+                this.countCards += 1
             }
         },
         addTask(cardIndex, newTask) {
@@ -66,7 +61,7 @@ Vue.component('column2', {
         return {
             name: '',
             cards: [],
-            count: 0
+            countCards: 0
         }
     }
 })
@@ -75,22 +70,14 @@ Vue.component('column3', {
     template: `
     <div class="column">
         <h2 class="t-a-c">Выполнено</h2>
-        <input v-model="name" type="text">
-        <button v-on:click="addCard(name)">Добавить карточку</button>
-        <ul>
-            <li v-for="(card, index) in cards">
-                <p>{{ card.name }}</p>
-                <list :tasks="card.tasks" @add-task="addTask(index, $event)"></list>
-            </li>
-        </ul>
     </div>
     `,
     methods: {
         addCard() {
-            if (this.count < 3 && this.name !== '') {
+            if (this.name !== '') {
                 this.cards.push({name: this.name, tasks: []})
                 this.name = ''
-                this.count += 1
+                this.countCards += 1
             }
         },
         addTask(cardIndex, newTask) {
@@ -101,7 +88,7 @@ Vue.component('column3', {
         return {
             name: '',
             cards: [],
-            count: 0
+            countCards: 0
         }
     }
 })
@@ -119,14 +106,24 @@ Vue.component('list', {
     `,
     data() {
         return {
-            newTask: ''
+            newTask: '',
+            countTask: 0
         }
     },
     methods: {
         addTask() {
-            if (this.newTask !== ''){
+            if (this.newTask !== '' && this.countTask < 3){
                 this.$emit('add-task', {name: this.newTask, completeStyle: false})
                 this.newTask = ''
+                this.countTask += 1
+            }
+            else if (this.newTask !== '' && this.countTask < 5) {
+                this.$emit('add-task', {name: this.newTask, completeStyle: false})
+                this.newTask = ''
+                this.countTask += 1
+            }
+            else {
+                alert('Максимум можно добавить только 5 задач!')
             }
         },
         completeTask(index) {
