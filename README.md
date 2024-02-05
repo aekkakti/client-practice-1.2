@@ -1,5 +1,10 @@
-# client-practice-TODO-1.2
+# TODO - client-practice-1.2
 
-Простенькая реализация проекта для хранения заметов (TODO)
+Простенькая реализация проекта для хранения заметок (TODO)
 
-git clone https://github.com/aekkakti/client-practice-1.2
+Клонирование репозитория:
+
+```bash
+   git clone https://github.com/aekkakti/client-practice-1.2
+
+```
