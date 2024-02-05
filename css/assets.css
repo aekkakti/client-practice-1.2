@@ -1,4 +1,5 @@
 #todo {
+    padding-left: 5px;
     border: 1px solid black;
     width: 100%;
     display: grid;
@@ -31,3 +32,21 @@ button {
 .completeStyle:hover {
     cursor: pointer;
 }
+
+.clearTODO {
+    width: 130px;
+    height: 50px;
+    background-color: red;
+}
+
+.addCardInput {
+    width: 200px;
+    height: 30px;
+}
+
+.addCardButton {
+    width: 150px;
+    height: 50px;
+}
+
+

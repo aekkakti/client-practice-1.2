@@ -2,8 +2,9 @@ Vue.component('column1', {
     template: `
     <div class="column">
         <h2 class="t-a-c">Принято в работу</h2>
-        <input v-model="name" type="text">
-        <button v-on:click="addCard(name)">Добавить карточку</button>
+        <button @click="removeFromLocalStorage" class="clearTODO">Удалить все карточки</button><br><br>
+        <input v-model="name" type="text" class="addCardInput"><br><br>
+        <button @click="addCard(name)" class="addCardButton">Добавить карточку</button>
         <ul>
             <li v-for="(card, index) in cards">
                 <p>{{ card.name }}</p>
@@ -20,11 +21,14 @@ Vue.component('column1', {
                 this.countCards += 1
                 this.saveToLocalStorage();
             }
+            else if (this.name === '') {
+                alert('Нельзя создавать пустую карточку!')
+            }
             else {
                 alert('Максимум можно добавить только 3 карточки!')
             }
         },
-        addTask(cardIndex, newTask, countTasks) {
+        addTask(cardIndex, newTask) {
             this.cards[cardIndex].tasks.push(newTask);
             this.saveToLocalStorage();
         },
@@ -42,7 +46,11 @@ Vue.component('column1', {
         saveToLocalStorage() {
             let jsonData = JSON.stringify(this.cards);
             localStorage.setItem('todo', jsonData)
-            }
+            },
+        removeFromLocalStorage(){
+            localStorage.clear()
+            location.reload();
+        }
         },
         mounted() {
             this.loadFromLocalStorage();
@@ -138,6 +146,9 @@ Vue.component('list', {
                 this.$emit('add-task', {name: this.newTask, completeStyle: false})
                 this.newTask = ''
                 this.countTask += 1
+            }
+            else if (this.newTask === '') {
+                alert('Нельзя создавать пустую задачу!')
             }
             else {
                 alert('Максимум можно добавить только 5 задач!')
