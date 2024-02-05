@@ -18,6 +18,7 @@ Vue.component('column1', {
                 this.cards.push({name: this.name, tasks: []})
                 this.name = ''
                 this.countCards += 1
+                this.saveToLocalStorage();
             }
             else {
                 alert('Максимум можно добавить только 3 карточки!')
@@ -25,11 +26,27 @@ Vue.component('column1', {
         },
         addTask(cardIndex, newTask, countTasks) {
             this.cards[cardIndex].tasks.push(newTask);
+            this.saveToLocalStorage();
         },
         completeTask(cardIndex, taskIndex) {
             this.cards[cardIndex].tasks[taskIndex].completeStyle = !this.cards[cardIndex].tasks[taskIndex].completeStyle
-        }
-    },
+            this.saveToLocalStorage();
+        },
+
+        loadFromLocalStorage() {
+            let savedData = localStorage.getItem('todo');
+            if (savedData) {
+                this.cards = JSON.parse(savedData)
+                }
+            },
+        saveToLocalStorage() {
+            let jsonData = JSON.stringify(this.cards);
+            localStorage.setItem('todo', jsonData)
+            }
+        },
+        mounted() {
+            this.loadFromLocalStorage();
+        },
     data() {
         return {
             name: '',
