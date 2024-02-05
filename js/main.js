@@ -36,10 +36,12 @@ Vue.component('column1', {
             this.cards[cardIndex].tasks[taskIndex].completeStyle = !this.cards[cardIndex].tasks[taskIndex].completeStyle
             if (this.cards[cardIndex].tasks[taskIndex].completeStyle === true){
                 this.completeTaskCount += 1
-                this.completeTaskPercent = 100 / this.completeTaskCount
+                this.completeTaskPercent = 100 / this.cards[cardIndex].tasks.length * this.completeTaskCount
+                console.log(this.completeTaskPercent)
             }
             else {
                 this.completeTaskCount -= 1
+                this.completeTaskPercent = 100 / this.cards[cardIndex].tasks.length * this.completeTaskCount
                 console.log(this.completeTaskPercent)
             }
             this.saveToLocalStorage()
@@ -130,6 +132,7 @@ Vue.component('column3', {
 
 Vue.component('list', {
     props: ['tasks'],
+    columns: [[],[],[]],
     template: `
     <ul>
         <li v-for="(task, index) in tasks" :key="index">
