@@ -2,4 +2,9 @@
 
 Простенькая реализация проекта для хранения заметов (TODO)
 
-git clone https://github.com/aekkakti/client-practice-1.2
+Клонирование репозитория:
+
+```bash
+   git clone https://github.com/aekkakti/client-practice-1.2
+
+```
