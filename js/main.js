@@ -37,6 +37,15 @@ Vue.component('column1', {
             if (this.cards[cardIndex].tasks[taskIndex].completeStyle === true){
                 this.completeTaskCount += 1
                 this.completeTaskPercent = 100 / this.cards[cardIndex].tasks.length * this.completeTaskCount
+                if (this.completeTaskPercent >= 50) {
+                    let movedCard = this.cards.splice(cardIndex, 1)[0]
+                    this.$parent.$emit('move-to-column', { card: movedCard , column: 2 })
+                }
+                if (this.completeTaskPercent === 100) {
+                    let movedCard = this.cards.splice(cardIndex, 1)[0]
+                    this.cards[cardIndex].completeDate = new Date()
+                    this.$parent.$emit('move-to-column', { card: movedCard , column: 3})
+                }
                 console.log(this.completeTaskPercent)
             }
             else {
@@ -132,7 +141,6 @@ Vue.component('column3', {
 
 Vue.component('list', {
     props: ['tasks'],
-    columns: [[],[],[]],
     template: `
     <ul>
         <li v-for="(task, index) in tasks" :key="index">
@@ -175,4 +183,11 @@ Vue.component('list', {
 
 let app = new Vue({
     el: "#todo",
+    data: {
+        columns: [[], [], []]
+    },
+    mounted() {
+        this.$root.$on('move-to-column', ({ cardIndex, column }) => {
+        })
+    }
 })
