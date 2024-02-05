@@ -19,7 +19,7 @@ Vue.component('column1', {
                 this.cards.push({name: this.name, tasks: []})
                 this.name = ''
                 this.countCards += 1
-                this.saveToLocalStorage();
+                this.saveToLocalStorage()
             }
             else if (this.name === '') {
                 alert('Нельзя создавать пустую карточку!')
@@ -30,11 +30,19 @@ Vue.component('column1', {
         },
         addTask(cardIndex, newTask) {
             this.cards[cardIndex].tasks.push(newTask);
-            this.saveToLocalStorage();
+            this.saveToLocalStorage()
         },
         completeTask(cardIndex, taskIndex) {
             this.cards[cardIndex].tasks[taskIndex].completeStyle = !this.cards[cardIndex].tasks[taskIndex].completeStyle
-            this.saveToLocalStorage();
+            if (this.cards[cardIndex].tasks[taskIndex].completeStyle === true){
+                this.completeTaskCount += 1
+                this.completeTaskPercent = 100 / this.completeTaskCount
+            }
+            else {
+                this.completeTaskCount -= 1
+                console.log(this.completeTaskPercent)
+            }
+            this.saveToLocalStorage()
         },
 
         loadFromLocalStorage() {
@@ -49,17 +57,19 @@ Vue.component('column1', {
             },
         removeFromLocalStorage(){
             localStorage.clear()
-            location.reload();
+            location.reload()
         }
         },
         mounted() {
-            this.loadFromLocalStorage();
+            this.loadFromLocalStorage()
         },
     data() {
         return {
             name: '',
             cards: [],
             countCards: 0,
+            completeTaskCount: 0,
+            completeTaskPercent: 0
         }
     }
 })
