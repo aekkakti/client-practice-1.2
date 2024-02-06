@@ -109,7 +109,6 @@ Vue.component('column2', {
                 this.$emit('tasksCompleted',cardIndex);
                 this.cards.splice(cardIndex, 1)
             }
-            this.saveToLocalStorage()
         },
     },
 
