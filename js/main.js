@@ -59,9 +59,9 @@ Vue.component('column1', {
             location.reload()
         }
         },
-        mounted() {
-            this.loadFromLocalStorage()
-        },
+    mounted() {
+        this.loadFromLocalStorage()
+    },
     data() {
         return {
             name: '',
@@ -106,10 +106,9 @@ Vue.component('column2', {
             const completedTasks = this.cards[cardIndex].tasks.filter(task => task.completeStyle)
             this.completeTaskPercent = 100 / this.cards[cardIndex].tasks.length * completedTasks.length
             if (this.completeTaskPercent === 100) {
-                this.$parent.$children[2].moveCardToFinish(cardIndex);
+                this.$emit('tasksCompleted',cardIndex);
                 this.cards.splice(cardIndex, 1)
             }
-            console.log(this.completeTaskPercent)
             this.saveToLocalStorage()
         },
     },
