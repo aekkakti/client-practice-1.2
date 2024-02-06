@@ -16,7 +16,9 @@ Vue.component('column1', {
     methods: {
         addCard() {
             if (this.countCards < 3 && this.name !== '') {
-                this.cards.push({name: this.name, tasks: []})
+                let newCard = {name: this.name, tasks: []}
+                this.cards.push(newCard);
+                this.$parent.$children[1].Column1Cards.push(newCard);
                 this.name = ''
                 this.countCards += 1
                 this.saveToLocalStorage()
@@ -37,21 +39,15 @@ Vue.component('column1', {
             if (this.cards[cardIndex].tasks[taskIndex].completeStyle === true){
                 this.completeTaskCount += 1
                 this.completeTaskPercent = 100 / this.cards[cardIndex].tasks.length * this.completeTaskCount
-                if (this.completeTaskPercent >= 50) {
-                    let movedCard = this.cards.splice(cardIndex, 1)[0]
-                    this.$parent.$emit('move-to-column', { card: movedCard , column: 2 })
-                }
-                if (this.completeTaskPercent === 100) {
-                    let movedCard = this.cards.splice(cardIndex, 1)[0]
-                    this.cards[cardIndex].completeDate = new Date()
-                    this.$parent.$emit('move-to-column', { card: movedCard , column: 3})
-                }
                 console.log(this.completeTaskPercent)
+                if (this.completeTaskPercent >= 50) {
+                    app.$children[1].moveCardToInProgress(cardIndex);
+                    this.cards.splice(cardIndex, 1)
+                }
             }
             else {
                 this.completeTaskCount -= 1
                 this.completeTaskPercent = 100 / this.cards[cardIndex].tasks.length * this.completeTaskCount
-                console.log(this.completeTaskPercent)
             }
             this.saveToLocalStorage()
         },
@@ -89,11 +85,17 @@ Vue.component('column2', {
     template: `
     <div class="column">
         <h2 class="t-a-c">В моменте</h2>
+        <ul>
+            <li v-for="(card, index) in cards">
+                <p>{{ card.name }}</p>
+                <list :tasks="card.tasks" @add-task="addTask(index, $event)"></list>
+            </li>
+        </ul>
     </div>
     `,
     methods: {
-        addCard() {
-            if (this.countCards < 5 && this.name !== '') {
+        addCard(name) {
+            if (this.countCards < 3 && this.name !== '') {
                 this.cards.push({name: this.name, tasks: []})
                 this.name = ''
                 this.countCards += 1
@@ -102,12 +104,20 @@ Vue.component('column2', {
         addTask(cardIndex, newTask) {
             this.cards[cardIndex].tasks.push(newTask)
         },
+        moveCardToInProgress(cardIndex) {
+            if (this.countCards < 3) {
+                this.cards.push(this.Column1Cards[cardIndex]);
+                this.Column1Cards.splice(cardIndex, 1);
+                this.countCards += 1;
+            }
+        }
     },
     data() {
         return {
             name: '',
             cards: [],
-            countCards: 0
+            countCards: 0,
+            Column1Cards: []
         }
     }
 })
@@ -116,6 +126,13 @@ Vue.component('column3', {
     template: `
     <div class="column">
         <h2 class="t-a-c">Выполнено</h2>
+        <ul>
+            <li v-for="(card, index) in cards">
+                <p>{{ card.name }}</p>
+                <list :tasks="card.tasks" @complete-task="completeTask(index, $event)"></list>
+            </li>
+        </ul>
+        </ul>
     </div>
     `,
     methods: {
@@ -183,11 +200,4 @@ Vue.component('list', {
 
 let app = new Vue({
     el: "#todo",
-    data: {
-        columns: [[], [], []]
-    },
-    mounted() {
-        this.$root.$on('move-to-column', ({ cardIndex, column }) => {
-        })
-    }
 })
