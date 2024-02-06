@@ -106,7 +106,7 @@ Vue.component('column2', {
             const completedTasks = this.cards[cardIndex].tasks.filter(task => task.completeStyle)
             this.completeTaskPercent = 100 / this.cards[cardIndex].tasks.length * completedTasks.length
             if (this.completeTaskPercent === 100) {
-                app.$children[2].moveCardToFinish(cardIndex);
+                this.$parent.$children[2].moveCardToFinish(cardIndex);
                 this.cards.splice(cardIndex, 1)
             }
             console.log(this.completeTaskPercent)
@@ -138,13 +138,6 @@ Vue.component('column3', {
     </div>
     `,
     methods: {
-        addCard() {
-            if (this.name !== '') {
-                this.cards.push({name: this.name, tasks: []})
-                this.name = ''
-                this.countCards += 1
-            }
-        },
         addTask(cardIndex, newTask) {
             this.cards[cardIndex].tasks.push(newTask)
         },
@@ -160,10 +153,8 @@ Vue.component('column3', {
             const completedTasks = this.cards[cardIndex].tasks.filter(task => task.completeStyle)
             this.completeTaskPercent = 100 / this.cards[cardIndex].tasks.length * completedTasks.length
             if (this.completeTaskPercent === 100) {
-                app.$children[2].moveCardToFinish(cardIndex);
                 this.cards.splice(cardIndex, 1)
             }
-            console.log(this.completeTaskPercent)
             this.saveToLocalStorage()
         },
     },
