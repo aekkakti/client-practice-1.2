@@ -129,6 +129,7 @@ Vue.component('column3', {
         <ul>
             <li v-for="(card, index) in cards">
                 <p>{{ card.name }}</p>
+                <p> Время закрытия карточки: {{ card.endTime }}</p>
                 <list :tasks="card.tasks" @complete-task="completeTask(index, $event)"></list>
             </li>
         </ul>
@@ -151,12 +152,14 @@ Vue.component('column3', {
                 this.cards.push(this.Column2Cards[cardIndex]);
                 this.Column2Cards.splice(cardIndex, 1);
                 this.countCards += 1;
+                const endTime = new Date();
             }
         },
     },
     data() {
         return {
             name: '',
+            endTime: 0,
             cards: [],
             countCards: 0,
             Column2Cards: []
@@ -183,12 +186,7 @@ Vue.component('list', {
     },
     methods: {
         addTask() {
-            if (this.newTask !== '' && this.countTask < 3){
-                this.$emit('add-task', {name: this.newTask, completeStyle: false})
-                this.newTask = ''
-                this.countTask += 1
-            }
-            else if (this.newTask !== '' && this.countTask < 5) {
+            if (this.newTask !== '' && (this.countTask < 3 || this.countTask < 5)){
                 this.$emit('add-task', {name: this.newTask, completeStyle: false})
                 this.newTask = ''
                 this.countTask += 1
