@@ -36,22 +36,14 @@ Vue.component('column1', {
         },
         completeTask(cardIndex, taskIndex) {
             this.cards[cardIndex].tasks[taskIndex].completeStyle = !this.cards[cardIndex].tasks[taskIndex].completeStyle
-            if (this.cards[cardIndex].tasks[taskIndex].completeStyle === true){
-                this.completeTaskCount += 1
-                this.completeTaskPercent = 100 / this.cards[cardIndex].tasks.length * this.completeTaskCount
-                console.log(this.completeTaskPercent)
-                if (this.completeTaskPercent >= 50) {
-                    app.$children[1].moveCardToInProgress(cardIndex);
-                    this.cards.splice(cardIndex, 1)
-                }
-            }
-            else {
-                this.completeTaskCount -= 1
-                this.completeTaskPercent = 100 / this.cards[cardIndex].tasks.length * this.completeTaskCount
+            const completedTasks = this.cards[cardIndex].tasks.filter(task => task.completeStyle)
+            this.completeTaskPercent = 100 / this.cards[cardIndex].tasks.length * completedTasks.length
+            if (this.completeTaskPercent >= 50) {
+                app.$children[1].moveCardToInProgress(cardIndex);
+                this.cards.splice(cardIndex, 1)
             }
             this.saveToLocalStorage()
         },
-
         loadFromLocalStorage() {
             let savedData = localStorage.getItem('todo');
             if (savedData) {
@@ -75,8 +67,6 @@ Vue.component('column1', {
             name: '',
             cards: [],
             countCards: 0,
-            completeTaskCount: 0,
-            completeTaskPercent: 0
         }
     }
 })
@@ -88,7 +78,7 @@ Vue.component('column2', {
         <ul>
             <li v-for="(card, index) in cards">
                 <p>{{ card.name }}</p>
-                <list :tasks="card.tasks" @add-task="addTask(index, $event)"></list>
+                <list :tasks="card.tasks" @complete-task="completeTask(index, $event)"></list>
             </li>
         </ul>
     </div>
@@ -110,8 +100,20 @@ Vue.component('column2', {
                 this.Column1Cards.splice(cardIndex, 1);
                 this.countCards += 1;
             }
-        }
+        },
+        completeTask(cardIndex, taskIndex) {
+            this.cards[cardIndex].tasks[taskIndex].completeStyle = !this.cards[cardIndex].tasks[taskIndex].completeStyle
+            const completedTasks = this.cards[cardIndex].tasks.filter(task => task.completeStyle)
+            this.completeTaskPercent = 100 / this.cards[cardIndex].tasks.length * completedTasks.length
+            if (this.completeTaskPercent === 100) {
+                app.$children[2].moveCardToFinish(cardIndex);
+                this.cards.splice(cardIndex, 1)
+            }
+            console.log(this.completeTaskPercent)
+            this.saveToLocalStorage()
+        },
     },
+
     data() {
         return {
             name: '',
@@ -146,12 +148,31 @@ Vue.component('column3', {
         addTask(cardIndex, newTask) {
             this.cards[cardIndex].tasks.push(newTask)
         },
+        moveCardToFinish(cardIndex) {
+            if (this.countCards < 3) {
+                this.cards.push(this.Column2Cards[cardIndex]);
+                this.Column2Cards.splice(cardIndex, 1);
+                this.countCards += 1;
+            }
+        },
+        completeTask(cardIndex, taskIndex) {
+            this.cards[cardIndex].tasks[taskIndex].completeStyle = !this.cards[cardIndex].tasks[taskIndex].completeStyle
+            const completedTasks = this.cards[cardIndex].tasks.filter(task => task.completeStyle)
+            this.completeTaskPercent = 100 / this.cards[cardIndex].tasks.length * completedTasks.length
+            if (this.completeTaskPercent === 100) {
+                app.$children[2].moveCardToFinish(cardIndex);
+                this.cards.splice(cardIndex, 1)
+            }
+            console.log(this.completeTaskPercent)
+            this.saveToLocalStorage()
+        },
     },
     data() {
         return {
             name: '',
             cards: [],
-            countCards: 0
+            countCards: 0,
+            Column2Cards: []
         }
     }
 })
