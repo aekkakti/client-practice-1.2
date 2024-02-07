@@ -98,7 +98,6 @@ Vue.component('column2', {
             if (this.completeTaskPercent === 100) {
                 this.$parent.$children[2].cards.push(this.cards[cardIndex])
                 this.cards.splice(cardIndex, 1)
-                this.endTime = new Date()
             }
         },
     },
@@ -130,7 +129,7 @@ Vue.component('column3', {
     data() {
         return {
             name: '',
-            endTime: 0,
+            endTime: new Date(),
             cards: [],
             countCards: 0,
         }
