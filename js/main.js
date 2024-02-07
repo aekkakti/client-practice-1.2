@@ -120,7 +120,7 @@ Vue.component('column3', {
             <li v-for="(card, index) in cards">
                 <p>{{ card.name }}</p>
                 <p> Время закрытия карточки: {{ endTime }}</p>
-                <list :tasks="card.tasks" @complete-task="completeTask(index, $event)"></list>
+                <list :tasks="card.tasks"></list>
             </li>
         </ul>
         </ul>
