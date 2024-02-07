@@ -84,16 +84,6 @@ Vue.component('column2', {
     </div>
     `,
     methods: {
-        addCard(name) {
-            if (this.countCards < 3 && this.name !== '') {
-                this.cards.push({name: this.name, tasks: []})
-                this.name = ''
-                this.countCards += 1
-            }
-        },
-        addTask(cardIndex, newTask) {
-            this.cards[cardIndex].tasks.push(newTask)
-        },
         moveCardToInProgress(cardIndex) {
             if (this.countCards < 3) {
                 this.cards.push(this.Column1Cards[cardIndex]);
@@ -106,8 +96,9 @@ Vue.component('column2', {
             const completedTasks = this.cards[cardIndex].tasks.filter(task => task.completeStyle)
             this.completeTaskPercent = 100 / this.cards[cardIndex].tasks.length * completedTasks.length
             if (this.completeTaskPercent === 100) {
-                app.$children[2].moveCardToFinish(cardIndex);
+                this.$parent.$children[2].cards.push(this.cards[cardIndex])
                 this.cards.splice(cardIndex, 1)
+                this.endTime = new Date()
             }
         },
     },
@@ -129,40 +120,19 @@ Vue.component('column3', {
         <ul>
             <li v-for="(card, index) in cards">
                 <p>{{ card.name }}</p>
-                <p> Время закрытия карточки: {{ card.endTime }}</p>
+                <p> Время закрытия карточки: {{ endTime }}</p>
                 <list :tasks="card.tasks" @complete-task="completeTask(index, $event)"></list>
             </li>
         </ul>
         </ul>
     </div>
     `,
-    methods: {
-        addCard(name) {
-            if (this.countCards < 3 && this.name !== '') {
-                this.cards.push({name: this.name, tasks: []})
-                this.name = ''
-                this.countCards += 1
-            }
-        },
-        addTask(cardIndex, newTask) {
-            this.cards[cardIndex].tasks.push(newTask)
-        },
-        moveCardToFinish(cardIndex) {
-            if (this.countCards < 3) {
-                this.cards.push(this.Column2Cards[cardIndex]);
-                this.Column2Cards.splice(cardIndex, 1);
-                this.countCards += 1;
-                const endTime = new Date();
-            }
-        },
-    },
     data() {
         return {
             name: '',
             endTime: 0,
             cards: [],
             countCards: 0,
-            Column2Cards: []
         }
     }
 })
